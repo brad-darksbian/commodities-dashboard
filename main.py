@@ -92,62 +92,6 @@ da_postiions = dbc.Row(
     ]
 )
 
-# Container for 3d Net Postion Chart
-da_3d_positions = dbc.Row(
-    [
-        dbc.Col(
-            md=3,
-        ),
-        dbc.Col(
-            dcc.Graph(
-                id="da_3d_net",
-                style={"height": "70vh"},
-                config=lc.tool_config,
-            ),
-            md=6,
-        ),
-        dbc.Col(
-            md=3,
-        ),
-    ]
-)
-
-# Container for relative change bar charts
-da_diffs = dbc.Row(
-    [
-        dbc.Col(
-            dcc.Graph(
-                id="da_diff_all",
-                style={"height": "75vh"},
-                config=lc.tool_config,
-            ),
-            md=6,
-        ),
-        dbc.Col(
-            dcc.Graph(
-                id="da_diff_pct",
-                style={"height": "75vh"},
-                config=lc.tool_config,
-            ),
-            md=6,
-        ),
-    ]
-)
-
-# Container for the latest week position bar chart
-da_pos_snap = dbc.Row(
-    [
-        dbc.Col(
-            dcc.Graph(
-                id="da_bar",
-                style={"height": "75vh"},
-                config=lc.tool_config,
-            ),
-            md=12,
-        ),
-    ]
-)
-
 # Reference cards for bottom disclosures
 # References relating to DEACOT report
 deacot_reference_card = (
@@ -206,6 +150,66 @@ da_reference_card = (
     ),
 )
 
+
+# Container for 3d Net Postion Chart
+da_3d_positions = dbc.Row(
+    [
+        dbc.Col(
+            html.Div(deacot_reference_card),
+            md=3,
+        ),
+        dbc.Col(
+            dcc.Graph(
+                id="da_3d_net",
+                style={"height": "70vh"},
+                config=lc.tool_config,
+            ),
+            md=6,
+        ),
+        dbc.Col(
+            html.Div(da_reference_card),
+            md=3,
+        ),
+    ]
+)
+
+# Container for relative change bar charts
+da_diffs = dbc.Row(
+    [
+        dbc.Col(
+            dcc.Graph(
+                id="da_diff_all",
+                style={"height": "75vh"},
+                config=lc.tool_config,
+            ),
+            md=6,
+        ),
+        dbc.Col(
+            dcc.Graph(
+                id="da_diff_pct",
+                style={"height": "75vh"},
+                config=lc.tool_config,
+            ),
+            md=6,
+        ),
+    ]
+)
+
+# Container for the latest week position bar chart
+da_pos_snap = dbc.Row(
+    [
+        dbc.Col(
+            dcc.Graph(
+                id="da_bar",
+                style={"height": "75vh"},
+                config=lc.tool_config,
+            ),
+            md=12,
+        ),
+    ]
+)
+
+
 # Container to put the reference row together
 references = dbc.Row(
     [
@@ -243,7 +247,6 @@ main_page = html.Div(
         html.Hr(),
         da_diffs,
         html.Hr(),
-        references,
     ],
     style=CONTENT_STYLE,
 )
