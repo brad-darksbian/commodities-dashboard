@@ -984,6 +984,59 @@ def make_diff_barchart_DA_actual(df, commodity, spare):
     return fig
 
 
+def da_3d_surface(df, commodity):
+    # This is an experiment in charting the DA for a commodity in 3d
+    # We'll use the net values to give a postive-negative view
+    y_data = [
+        "Producers",
+        "Non-reporting",
+        "Swap Dealers",
+        "Money Managers",
+        "Others",
+    ]
+
+    z_data = [
+        df["prod_long_all"] - df["prod_short_all"],
+        df["nonreport_long_all"] - df["nonreport_short_all"],
+        df["swap_long_all"] - df["swap_short_all"],
+        df["money_long_all"] - df["money_short_all"],
+        df["other_long_all"] - df["other_short_all"],
+    ]
+
+    fig = go.Figure(
+        go.Surface(
+            contours={
+                "x": {
+                    "show": True,
+                    "start": 1.5,
+                    "end": 2,
+                    "size": 0.04,
+                    "color": "white",
+                },
+                "z": {"show": True, "start": 0.5, "end": 0.8, "size": 0.05},
+            },
+            x=df.index,
+            y=y_data,
+            z=z_data,
+        )
+    )
+    fig.update_layout(
+        title=commodity
+        + " Net Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA)",
+        scene={
+            # "xaxis": {"nticks": 20},
+            # "zaxis": {"nticks": 4},
+            "xaxis_title": "",
+            "yaxis_title": "",
+            "zaxis_title": "",
+            "camera_eye": {"x": 0.75, "y": 0.75, "z": 0.75},
+            "aspectratio": {"x": 0.75, "y": 0.75, "z": 0.5},
+        },
+    )
+    # fig.show()
+    return fig
+
+
 #############################################################################
 # Backstop
 #############################################################################

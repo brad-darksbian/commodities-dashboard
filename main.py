@@ -92,6 +92,26 @@ da_postiions = dbc.Row(
     ]
 )
 
+# Container for 3d Net Postion Chart
+da_3d_positions = dbc.Row(
+    [
+        dbc.Col(
+            md=3,
+        ),
+        dbc.Col(
+            dcc.Graph(
+                id="da_3d_net",
+                style={"height": "70vh"},
+                config=lc.tool_config,
+            ),
+            md=6,
+        ),
+        dbc.Col(
+            md=3,
+        ),
+    ]
+)
+
 # Container for relative change bar charts
 da_diffs = dbc.Row(
     [
@@ -217,6 +237,8 @@ main_page = html.Div(
         html.Hr(),
         da_postiions,
         html.Hr(),
+        da_3d_positions,
+        html.Hr(),
         da_pos_snap,
         html.Hr(),
         da_diffs,
@@ -314,6 +336,22 @@ def deacot_sentiment(future1):
     asset = arr[0]
 
     fig = sf.make_net_DA(df1, asset, "Contracts")
+    return fig
+
+
+# 3d postiion chart
+@app.callback(
+    dash.dependencies.Output("da_3d_net", "figure"),
+    [dash.dependencies.Input("future", "value")],
+)
+def deacot_sentiment(future1):
+    df1 = bl.df_da[bl.df_da["Exchange"] == future1]
+    df1.set_index("Date", inplace=True)
+
+    arr = df1["commodity"].unique()
+    asset = arr[0]
+
+    fig = sf.da_3d_surface(df1, asset)
     return fig
 
 
