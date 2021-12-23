@@ -532,7 +532,7 @@ def make_chart_DA(df, commodity, units):
     fig.update_layout(
         newshape=dict(line_color="yellow"),
         title=commodity
-        + " Disaggregation of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants",
+        + " Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA)",
         xaxis_title="",
         yaxis_title=units,
     )
@@ -628,7 +628,7 @@ def make_barchart_DA(df, commodity, spare):
         barmode="group",
         newshape=dict(line_color="yellow"),
         title=commodity
-        + " Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants: "
+        + " Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA): "
         + df.index[0],
         xaxis_title="",
         yaxis_title="percent",
@@ -731,9 +731,9 @@ def make_diff_barchart_DA(df, commodity, spare):
         barmode="group",
         newshape=dict(line_color="yellow"),
         title=commodity
-        + " Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (week-over-week change): "
+        + " Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (week-over-week change) (DA): "
         + df.index[1]
-        + " through "
+        + " - "
         + df.index[0],
         xaxis_title="",
         yaxis_title="percent",
@@ -866,7 +866,7 @@ def make_net_DA_pos(df, commodity, units):
     fig.update_layout(
         newshape=dict(line_color="yellow"),
         title=commodity
-        + " Net Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants",
+        + " Net Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA)",
         xaxis_title="",
         yaxis_title="Net Orders",
     )
@@ -973,9 +973,9 @@ def make_diff_barchart_DA_actual(df, commodity, spare):
         barmode="group",
         newshape=dict(line_color="yellow"),
         title=commodity
-        + " Contract Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (week-over-week change): "
+        + " Contract Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (week-over-week change) (DA): "
         + df.index[1]
-        + " through "
+        + " - "
         + df.index[0],
         xaxis_title="",
         yaxis_title="Contracts",
