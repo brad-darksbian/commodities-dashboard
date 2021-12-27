@@ -23,3 +23,7 @@ Use the code how you please.  If you use it as a basis for your own project, be 
 Any questions, comments, or concerns - create an issue or just shoot me an email brad@darksbian.com
 
 Brad
+
+**Addendum** - Some users have pointed out to me that when running this code on OSX, you can sometimes get an error like "[SSL: CERTIFICATE_VERIFY_FAILED]".
+
+This is a known issue with python >=3.6 and OSX.  The fix is simple and outlined here:  https://stackoverflow.com/questions/27835619/urllib-and-ssl-certificate-verify-failed-error
