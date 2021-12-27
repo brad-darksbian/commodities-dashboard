@@ -1006,14 +1006,14 @@ def da_3d_surface(df, commodity):
     fig = go.Figure(
         go.Surface(
             contours={
-                "x": {
+                "z": {
                     "show": True,
-                    "start": 1.5,
-                    "end": 2,
-                    "size": 0.04,
-                    "color": "white",
+                    "start": 0.5,
+                    "end": 0.8,
+                    "size": 0.05,
+                    "width": 2,
+                    "color": "black",
                 },
-                "z": {"show": True, "start": 0.5, "end": 0.8, "size": 0.05},
             },
             x=df.index,
             y=y_data,
@@ -1024,14 +1024,17 @@ def da_3d_surface(df, commodity):
         title=commodity
         + " Net Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA)",
         scene={
-            # "xaxis": {"nticks": 20},
-            # "zaxis": {"nticks": 4},
             "xaxis_title": "",
             "yaxis_title": "",
             "zaxis_title": "",
             "camera_eye": {"x": 0.75, "y": 0.75, "z": 0.75},
             "aspectratio": {"x": 0.75, "y": 0.75, "z": 0.5},
         },
+        margin=dict(
+            b=10,
+            l=10,
+            r=10,
+        ),
     )
     # fig.show()
     return fig
