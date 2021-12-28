@@ -21,11 +21,11 @@ sf.get_reports()
 
 # Get the data frames to work with
 # DEACOT report
-df_deacot = pd.read_csv(sf.deacot_file, na_values="x")
+df_deacot = sf.aggregate_reports("deacot")
 df_deacot = sf.deacot_process(df_deacot)
 
 # Disambiguation report
-df_da = pd.read_csv(sf.da_file, na_values="x", low_memory=False)
+df_da = sf.aggregate_reports("da")
 df_da = sf.DA_process(df_da)
 
 ####################################################

@@ -12,14 +12,27 @@ import urllib.request
 import shutil
 import os
 from datetime import datetime, timedelta
+import pandas as pd
+import numpy as np
 import layout_configs as lc
 import plotly.graph_objects as go
 
+#############################################################################
+# Configuration - Change these to suit
+#############################################################################
+# Path location
+base_path = "/tmp/"
 
-# Configure file paths for both reports
-# DO NOT CHANGE THE FILE NAME ITSELF - ONLY THE PATH
-deacot_file = "/tmp/deacot2021.txt"
-da_file = "/tmp/deacot_DA_2021.txt"
+# Set a list of years to retrieve for analysis
+# Data is available from 2006 until current
+# *Note* Adding more years will considerably slow down the dashboard
+analysis_years = [
+    "2021",
+    "2020",
+]
+
+# Set the base URL for the CFTC repository - should not need to be changed
+base_url = "https://www.cftc.gov/files/dea/history/"
 
 
 #############################################################################
@@ -36,46 +49,68 @@ def get_COT(url, file_name):
 
 
 # Function to make sure things are fresh for data
+def process_reports(report, current_date, file_path, file_name, url_path):
+    if report == "deacot":
+        src_file = "annual.txt"
+    else:
+        src_file = "f_year.txt"
+
+    if os.path.exists(file_path):
+        filetime = datetime.fromtimestamp(os.path.getctime(file_path))
+        if (filetime - timedelta(days=7)) <= current_date:
+            print(report + " file exists and is current - using cached data")
+        else:
+            get_COT(
+                url_path,
+                file_name,
+            )
+            os.rename(src_file, file_path)
+            print(report + " file is stale - getting fresh copy")
+    else:
+        print(report + " file does not exist - getting fresh copy")
+        get_COT(
+            url_path,
+            file_name,
+        )
+        os.rename(src_file, file_path)
+
+
 def get_reports():
     freshness_date = datetime.now() - timedelta(days=7)
-    if os.path.exists(deacot_file):
-        filetime = datetime.fromtimestamp(os.path.getctime(deacot_file))
-        if (filetime - timedelta(days=7)) <= freshness_date:
-            print("Deacot file exists and is current - using cached data")
-        else:
-            get_COT(
-                "https://www.cftc.gov/files/dea/history/deacot2021.zip",
-                "deacot2021.zip",
-            )
-            os.rename(r"annual.txt", deacot_file)
-            print("Deacot file is stale - getting fresh copy")
-    else:
-        print("Deacot file does not exist - getting fresh copy")
-        get_COT(
-            "https://www.cftc.gov/files/dea/history/deacot2021.zip", "deacot2021.zip"
-        )
-        os.rename(r"annual.txt", deacot_file)
 
-    if os.path.exists(da_file):
-        filetime = datetime.fromtimestamp(os.path.getctime(da_file))
-        if (filetime - timedelta(days=7)) <= freshness_date:
-            print(
-                "Disaggregation report file exists and is current - using cached data"
-            )
-        else:
-            get_COT(
-                "https://www.cftc.gov/files/dea/history/fut_disagg_txt_2021.zip",
-                "fut_disagg_txt_2021.zip",
-            )
-            os.rename(r"f_year.txt", da_file)
-            print("Disaggregation report file is stale - getting fresh copy")
+    # Loop through the years list for the deacot report
+    for i in analysis_years:
+        # Set up basic path constructs
+        url_path = base_url + "deacot" + i + ".zip"
+        file_name = "deacot" + i + ".zip"
+        file_path = base_path + "deacot" + i + ".txt"
+
+        process_reports("deacot", freshness_date, file_path, file_name, url_path)
+
+    # Loop again for the DA report
+    for i in analysis_years:
+        url_path = base_url + "fut_disagg_txt_" + i + ".zip"
+        file_name = "fut_disagg_txt_" + i + ".zip"
+        file_path = base_path + "deacot_DA_" + i + ".txt"
+
+        process_reports("DA", freshness_date, file_path, file_name, url_path)
+
+
+# function to aggregate all the reports into one dataframe for each report type
+def aggregate_reports(report_name):
+    if report_name == "deacot":
+        file_prefix = "deacot"
     else:
-        print("Disaggregation report file does not exist - getting fresh copy")
-        get_COT(
-            "https://www.cftc.gov/files/dea/history/fut_disagg_txt_2021.zip",
-            "fut_disagg_txt_2021.zip",
+        file_prefix = "deacot_DA_"
+    df = pd.DataFrame()
+    for i in analysis_years:
+        file_path = base_path + file_prefix + i + ".txt"
+        df1 = pd.read_csv(file_path, na_values="x", low_memory=False)
+        df = df.append(
+            df1,
+            ignore_index=True,
         )
-        os.rename(r"f_year.txt", da_file)
+    return df
 
 
 # Process raw reports (DEACOT)
