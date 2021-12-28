@@ -1,5 +1,9 @@
 # commodities-dashboard
-A simply dashboard to view commodities position data based on CFTC reports
+A simple dashboard to view commodities position data based on CFTC reports.
+
+This system is configured to pull one or multiple years of reports from the government website and process them into a consolidated view of several useful chart types.  I regualrly use this for my own analytics work so the repository will update as needs change.  However, I am treating this mostly as a teaching tool, so I will endeavor to keep the code clean and approachable by any skill level.
+
+Within the code, you will find a number of examples of various plotly chart types and ways to lay them out and call them.  Addtionally, there are several examples of Dash configuration such as various call backs and other elements that provide decent examples into the system.
 
 This is a python project using Dash and plotly to contextualize the content of the DEACOT and Disaggregation reports on futures trading activity provided weekly
 by the CFTC.
