@@ -50,7 +50,7 @@ def get_COT(url, file_name):
 
 # Function to make sure things are fresh for data
 def process_reports(report, current_date, file_path, file_name, url_path):
-    if report == "deacot":
+    if report == "Deacot":
         src_file = "annual.txt"
     else:
         src_file = "f_year.txt"
@@ -85,7 +85,7 @@ def get_reports():
         file_name = "deacot" + i + ".zip"
         file_path = base_path + "deacot" + i + ".txt"
 
-        process_reports("deacot", freshness_date, file_path, file_name, url_path)
+        process_reports("Deacot", freshness_date, file_path, file_name, url_path)
 
     # Loop again for the DA report
     for i in analysis_years:
@@ -1062,7 +1062,7 @@ def da_3d_surface(df, commodity):
             "xaxis_title": "",
             "yaxis_title": "",
             "zaxis_title": "",
-            "camera_eye": {"x": 0.75, "y": 0.75, "z": 0.75},
+            "camera_eye": {"x": 1, "y": -1, "z": 0.75},
             "aspectratio": {"x": 0.75, "y": 0.75, "z": 0.5},
         },
         margin=dict(
