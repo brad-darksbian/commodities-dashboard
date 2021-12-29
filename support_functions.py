@@ -205,6 +205,17 @@ def DA_process(df):
     # break out the exchange and commodity into new columns
     df["commodity"] = df["Exchange"].str.split(" - ", expand=True)[0]
     df["market"] = df["Exchange"].str.split(" - ", expand=True)[1]
+    # add columns to deal with date format for rangeslider
+    df["date_begin"] = df["Date"].min()
+    df["date_end"] = df["Date"].values.astype("datetime64[D]")
+    # Use numpy function to set the week number based on Tuesday when reports
+    # are released by the CFTC
+    df["week_number"] = np.busday_count(
+        df["date_begin"].values.astype("M8[D]"),
+        df["date_end"].values.astype("M8[D]"),
+        weekmask="Tue",
+    )
+
     return df
 
 
@@ -1057,7 +1068,10 @@ def da_3d_surface(df, commodity):
     )
     fig.update_layout(
         title=commodity
-        + " Net Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA)",
+        + " Net Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA): "
+        + df.index.values[0]
+        + " - "
+        + df.index.values[-1],
         scene={
             "xaxis_title": "",
             "yaxis_title": "",

@@ -159,11 +159,23 @@ da_3d_positions = dbc.Row(
             md=3,
         ),
         dbc.Col(
-            dcc.Graph(
-                id="da_3d_net",
-                style={"height": "70vh"},
-                config=lc.tool_config,
-            ),
+            [
+                dcc.Graph(
+                    id="da_3d_net",
+                    style={"height": "70vh"},
+                    config=lc.tool_config,
+                ),
+                dcc.RangeSlider(
+                    id="da_3d_net_range_slider",
+                    min=bl.df_da["week_number"].min(),
+                    max=bl.df_da["week_number"].max(),
+                    value=[
+                        bl.df_da["week_number"].min(),
+                        bl.df_da["week_number"].max(),
+                    ],
+                    allowCross=False,
+                ),
+            ],
             md=6,
         ),
         dbc.Col(
@@ -345,10 +357,24 @@ def deacot_sentiment(future1):
 # 3d postiion chart
 @app.callback(
     dash.dependencies.Output("da_3d_net", "figure"),
-    [dash.dependencies.Input("future", "value")],
+    [
+        dash.dependencies.Input("future", "value"),
+        dash.dependencies.Input("da_3d_net_range_slider", "value"),
+    ],
 )
-def deacot_sentiment(future1):
+def deacot_sentiment(future1, week):
+    # Rangeslider - set initial values if none are set
+    if week is None:
+        first_week = bl.df_da["week_number"].min()
+        last_week = bl.df_da["week_number"].max()
+    else:
+        first_week = week[0]
+        last_week = week[1]
+
     df1 = bl.df_da[bl.df_da["Exchange"] == future1]
+
+    # Rangeslider - filter by the selected slide ends
+    df1 = df1[(df1["week_number"] >= first_week) & (df1["week_number"] <= last_week)]
     df1.set_index("Date", inplace=True)
 
     arr = df1["commodity"].unique()
