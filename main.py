@@ -22,76 +22,6 @@ DROPDOWN_STYLE = {"textAlign": "left"}
 #############################################################################
 # Content
 #############################################################################
-# Create drop-down selector
-future_select = dbc.Row(
-    [
-        dbc.Col(
-            [
-                html.Div(
-                    [
-                        dcc.Dropdown(
-                            id="future",
-                            options=[{"label": i, "value": i} for i in bl.da_list],
-                            value="SILVER - COMMODITY EXCHANGE INC.",
-                        ),
-                    ],
-                    className="dash-bootstrap",
-                ),
-            ],
-            md=6,
-        )
-    ]
-)
-
-# Info Bar
-info_bar = html.Div(
-    id="summary",
-)
-
-# Container for sentiment charts
-sentiment_direction = dbc.Row(
-    [
-        dbc.Col(
-            dcc.Graph(
-                id="deacot_sent",
-                style={"height": "70vh"},
-                config=lc.tool_config,
-            ),
-            md=6,
-        ),
-        dbc.Col(
-            dcc.Graph(
-                id="da_sent",
-                style={"height": "70vh"},
-                config=lc.tool_config,
-            ),
-            md=6,
-        ),
-    ]
-)
-
-# Container for postion charts
-da_postiions = dbc.Row(
-    [
-        dbc.Col(
-            dcc.Graph(
-                id="da_pos_all",
-                style={"height": "70vh"},
-                config=lc.tool_config,
-            ),
-            md=6,
-        ),
-        dbc.Col(
-            dcc.Graph(
-                id="da_pos_pct",
-                style={"height": "70vh"},
-                config=lc.tool_config,
-            ),
-            md=6,
-        ),
-    ]
-)
-
 # Reference cards for bottom disclosures
 # References relating to DEACOT report
 deacot_reference_card = (
@@ -128,7 +58,7 @@ da_reference_card = (
                 [
                     html.H5("Disaggregation Report References", className="card-title"),
                     html.P(
-                        "A “producer/merchant/processor/user” is an entity that predominantly engages in the production, processing, packing or handling of a physical commodity."
+                        "A “producer / merchant / processor / user” is an entity that predominantly engages in the production, processing, packing or handling of a physical commodity."
                     ),
                     html.P(
                         "A “swap dealer” is an entity that deals primarily in swaps for a commodity. The swap dealer counterparties may be speculative traders, like hedge funds, or traditional commercial clients."
@@ -150,14 +80,134 @@ da_reference_card = (
     ),
 )
 
+# References relating to 3D surface for all
+da_reference_card_3d = (
+    dbc.Card(
+        [
+            dbc.CardBody(
+                [
+                    html.H5(
+                        "DA 3D Report Reference",
+                        className="card-title",
+                    ),
+                    html.P("For visual consistency, the labels have been abbreviated"),
+                    html.P(
+                        [
+                            "Pr is Producer",
+                            html.Br(),
+                            "SD is Swap Dealer",
+                            html.Br(),
+                            "MM is Money Manager",
+                            html.Br(),
+                            "NR is Non-reporting",
+                            html.Br(),
+                            "Ot is Other",
+                        ]
+                    ),
+                    html.P(
+                        [
+                            "L means long positions / Demand",
+                            html.Br(),
+                            "S means short positions / Supply",
+                            html.Br(),
+                            "Net is long positions minus short positions",
+                        ]
+                    ),
+                ]
+            )
+        ]
+    ),
+)
+
+
+# Create drop-down selector
+future_select = dbc.Row(
+    [
+        dbc.Col(
+            [
+                html.Div(
+                    [
+                        dcc.Dropdown(
+                            id="future",
+                            options=[{"label": i, "value": i} for i in bl.da_list],
+                            value="SILVER - COMMODITY EXCHANGE INC.",
+                        ),
+                    ],
+                    className="dash-bootstrap",
+                ),
+            ],
+            md=6,
+        )
+    ]
+)
+
+# Info Bar
+info_bar = html.Div(
+    id="summary",
+)
+
+# Container for sentiment charts
+sentiment_direction = dbc.Row(
+    [
+        dbc.Col(
+            html.Div(deacot_reference_card),
+            md=2,
+        ),
+        dbc.Col(
+            dcc.Graph(
+                id="deacot_sent",
+                style={"height": "70vh"},
+                config=lc.tool_config,
+            ),
+            md=8,
+        ),
+        dbc.Col(
+            html.Div(da_reference_card),
+            md=2,
+        ),
+    ]
+)
+
+# This is a busy chart so give it its own row
+DA_direction = dbc.Row(
+    [
+        dbc.Col(
+            dcc.Graph(
+                id="da_sent",
+                style={"height": "70vh"},
+                config=lc.tool_config,
+            ),
+            md=12,
+        ),
+    ]
+)
+
+# Container for postion charts
+da_postiions = dbc.Row(
+    [
+        dbc.Col(
+            dcc.Graph(
+                id="da_pos_all",
+                style={"height": "70vh"},
+                config=lc.tool_config,
+            ),
+            md=6,
+        ),
+        dbc.Col(
+            dcc.Graph(
+                id="da_pos_pct",
+                style={"height": "70vh"},
+                config=lc.tool_config,
+            ),
+            md=6,
+        ),
+    ]
+)
+
 
 # Container for 3d Net Postion Chart
 da_3d_positions = dbc.Row(
     [
-        dbc.Col(
-            html.Div(deacot_reference_card),
-            md=3,
-        ),
         dbc.Col(
             [
                 dcc.Graph(
@@ -176,11 +226,31 @@ da_3d_positions = dbc.Row(
                     allowCross=False,
                 ),
             ],
-            md=6,
+            md=5,
         ),
         dbc.Col(
-            html.Div(da_reference_card),
-            md=3,
+            html.Div(da_reference_card_3d),
+            md=2,
+        ),
+        dbc.Col(
+            [
+                dcc.Graph(
+                    id="da_3d_all",
+                    style={"height": "70vh"},
+                    config=lc.tool_config,
+                ),
+                dcc.RangeSlider(
+                    id="da_3d_all_range_slider",
+                    min=bl.df_da["week_number"].min(),
+                    max=bl.df_da["week_number"].max(),
+                    value=[
+                        bl.df_da["week_number"].min(),
+                        bl.df_da["week_number"].max(),
+                    ],
+                    allowCross=False,
+                ),
+            ],
+            md=5,
         ),
     ]
 )
@@ -251,6 +321,8 @@ main_page = html.Div(
         html.Hr(),
         sentiment_direction,
         html.Hr(),
+        DA_direction,
+        html.Hr(),
         da_postiions,
         html.Hr(),
         da_3d_positions,
@@ -312,7 +384,7 @@ def deacot_sentiment(future1):
     dash.dependencies.Output("da_sent", "figure"),
     [dash.dependencies.Input("future", "value")],
 )
-def deacot_sentiment(future1):
+def all_positions_da(future1):
     df1 = bl.df_da[bl.df_da["Exchange"] == future1]
     df1.set_index("Date", inplace=True)
 
@@ -328,7 +400,7 @@ def deacot_sentiment(future1):
     dash.dependencies.Output("da_pos_all", "figure"),
     [dash.dependencies.Input("future", "value")],
 )
-def deacot_sentiment(future1):
+def net_positions_actual_da(future1):
     df1 = bl.df_da[bl.df_da["Exchange"] == future1]
     df1.set_index("Date", inplace=True)
 
@@ -343,7 +415,7 @@ def deacot_sentiment(future1):
     dash.dependencies.Output("da_pos_pct", "figure"),
     [dash.dependencies.Input("future", "value")],
 )
-def deacot_sentiment(future1):
+def net_positions_pct_da(future1):
     df1 = bl.df_da[bl.df_da["Exchange"] == future1]
     df1.set_index("Date", inplace=True)
 
@@ -362,7 +434,7 @@ def deacot_sentiment(future1):
         dash.dependencies.Input("da_3d_net_range_slider", "value"),
     ],
 )
-def deacot_sentiment(future1, week):
+def da_3d_position_net(future1, week):
     # Rangeslider - set initial values if none are set
     if week is None:
         first_week = bl.df_da["week_number"].min()
@@ -384,12 +456,42 @@ def deacot_sentiment(future1, week):
     return fig
 
 
+# 3d postiion chart for all positions
+@app.callback(
+    dash.dependencies.Output("da_3d_all", "figure"),
+    [
+        dash.dependencies.Input("future", "value"),
+        dash.dependencies.Input("da_3d_all_range_slider", "value"),
+    ],
+)
+def da_3d_position_all(future1, week):
+    # Rangeslider - set initial values if none are set
+    if week is None:
+        first_week = bl.df_da["week_number"].min()
+        last_week = bl.df_da["week_number"].max()
+    else:
+        first_week = week[0]
+        last_week = week[1]
+
+    df1 = bl.df_da[bl.df_da["Exchange"] == future1]
+
+    # Rangeslider - filter by the selected slide ends
+    df1 = df1[(df1["week_number"] >= first_week) & (df1["week_number"] <= last_week)]
+    df1.set_index("Date", inplace=True)
+
+    arr = df1["commodity"].unique()
+    asset = arr[0]
+
+    fig = sf.da_3d_surface_all(df1, asset)
+    return fig
+
+
 # Week-over-week diffs in positions charts
 @app.callback(
     dash.dependencies.Output("da_diff_all", "figure"),
     [dash.dependencies.Input("future", "value")],
 )
-def deacot_sentiment(future1):
+def diff_position_actual_barchart_da(future1):
     df1 = bl.df_da[bl.df_da["Exchange"] == future1]
     df1.set_index("Date", inplace=True)
 
@@ -405,7 +507,7 @@ def deacot_sentiment(future1):
     dash.dependencies.Output("da_diff_pct", "figure"),
     [dash.dependencies.Input("future", "value")],
 )
-def deacot_sentiment(future1):
+def diff_position_pct_barchart_da(future1):
     df1 = bl.df_da[bl.df_da["Exchange"] == future1]
     df1.set_index("Date", inplace=True)
 
@@ -421,7 +523,7 @@ def deacot_sentiment(future1):
     dash.dependencies.Output("da_bar", "figure"),
     [dash.dependencies.Input("future", "value")],
 )
-def deacot_sentiment(future1):
+def total_position_barchart_da(future1):
     df1 = bl.df_da[bl.df_da["Exchange"] == future1]
     df1.set_index("Date", inplace=True)
 

@@ -1029,11 +1029,11 @@ def da_3d_surface(df, commodity):
     # This is an experiment in charting the DA for a commodity in 3d
     # We'll use the net values to give a postive-negative view
     y_data = [
-        "Producers",
-        "Non-reporting",
-        "Swap Dealers",
-        "Money Managers",
-        "Others",
+        "Pr - Net",
+        "NR - Net",
+        "SD - Net",
+        "MM - Net",
+        "Ot - Net",
     ]
 
     z_data = [
@@ -1074,6 +1074,89 @@ def da_3d_surface(df, commodity):
             "camera_eye": {"x": 1, "y": -1, "z": 0.75},
             "aspectratio": {"x": 0.75, "y": 0.75, "z": 0.5},
         },
+        margin=dict(
+            b=10,
+            l=10,
+            r=10,
+        ),
+    )
+    # fig.show()
+    return fig
+
+
+def da_3d_surface_all(df, commodity):
+    # This is a chart for all positions
+    # Comparatively, it gives a better sense of movement
+    # Downside is the Y axis arrangement
+
+    # Used abbreviations for display consistency
+    y_data = [
+        "Pr - S",
+        "SD - S",
+        "MM - S",
+        "NR - S",
+        "Ot - S",
+        "Pr - L",
+        "Ot - L",
+        "NR - L",
+        "SD - L",
+        "MM - L",
+    ]
+
+    # changed the sign on short positions to create a better logical flow
+    z_data = [
+        df["prod_short_all"] * -1,
+        df["swap_short_all"] * -1,
+        df["money_short_all"] * -1,
+        df["nonreport_short_all"] * -1,
+        df["other_short_all"] * -1,
+        df["prod_long_all"],
+        df["other_long_all"],
+        df["nonreport_long_all"],
+        df["swap_long_all"],
+        df["money_long_all"],
+    ]
+
+    fig = go.Figure(
+        go.Surface(
+            contours={
+                "z": {
+                    "show": True,
+                    "start": 0.5,
+                    "end": 0.8,
+                    "size": 0.05,
+                    "width": 2,
+                    "color": "black",
+                },
+            },
+            x=df.index,
+            y=y_data,
+            z=z_data,
+        )
+    )
+
+    # Explicitly defined paramters to allow all y-axis labels to display
+    fig.update_layout(
+        title=commodity
+        + " Disaggregated Report Actual Positions<br>(DA): "
+        + df.index.values[0]
+        + " - "
+        + df.index.values[-1],
+        scene=dict(
+            xaxis_title="",
+            yaxis=dict(
+                title="",
+                nticks=10,
+                ticktext=y_data,
+            ),
+            zaxis_title="",
+            camera_eye_x=1,
+            camera_eye_y=-1,
+            camera_eye_z=0.75,
+            aspectratio_x=0.75,
+            aspectratio_y=0.75,
+            aspectratio_z=0.5,
+        ),
         margin=dict(
             b=10,
             l=10,
