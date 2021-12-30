@@ -577,8 +577,7 @@ def make_chart_DA(df, commodity, units):
 
     fig.update_layout(
         newshape=dict(line_color="yellow"),
-        title=commodity
-        + " Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA)",
+        title=commodity + " Disaggregated Report of all positions (DA)",
         xaxis_title="",
         yaxis_title=units,
     )
@@ -673,9 +672,7 @@ def make_barchart_DA(df, commodity, spare):
     fig.update_layout(
         barmode="group",
         newshape=dict(line_color="yellow"),
-        title=commodity
-        + " Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA): "
-        + df.index[0],
+        title=commodity + " Disaggregated Report Positions (DA): " + df.index[0],
         xaxis_title="",
         yaxis_title="percent",
     )
@@ -777,7 +774,7 @@ def make_diff_barchart_DA(df, commodity, spare):
         barmode="group",
         newshape=dict(line_color="yellow"),
         title=commodity
-        + " Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (week-over-week change) (DA): "
+        + " Disaggregated Report Positions Percentage<br>(week-over-week change) (DA): "
         + df.index[1]
         + " - "
         + df.index[0],
@@ -845,8 +842,7 @@ def make_net_DA(df, commodity, units):
 
     fig.update_layout(
         newshape=dict(line_color="yellow"),
-        title=commodity
-        + " Net Percent Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA)",
+        title=commodity + " Disaggregated Report Net Percent Positions (DA)",
         xaxis_title="",
         yaxis_title="Net Percent Participation",
     )
@@ -911,8 +907,7 @@ def make_net_DA_pos(df, commodity, units):
 
     fig.update_layout(
         newshape=dict(line_color="yellow"),
-        title=commodity
-        + " Net Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA)",
+        title=commodity + " Disaggregated Report Net Positions (DA)",
         xaxis_title="",
         yaxis_title="Net Orders",
     )
@@ -1019,7 +1014,7 @@ def make_diff_barchart_DA_actual(df, commodity, spare):
         barmode="group",
         newshape=dict(line_color="yellow"),
         title=commodity
-        + " Contract Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (week-over-week change) (DA): "
+        + " Disaggregated Report Contract Positions<br>(week-over-week change) (DA): "
         + df.index[1]
         + " - "
         + df.index[0],
@@ -1068,7 +1063,7 @@ def da_3d_surface(df, commodity):
     )
     fig.update_layout(
         title=commodity
-        + " Net Positions of Producers, Swaps, Money Managers, Others,<br> and Non-Reporting Participants (DA): "
+        + " Disaggregated Report Net Positions<br>(DA): "
         + df.index.values[0]
         + " - "
         + df.index.values[-1],
