@@ -1,7 +1,7 @@
 import dash
 from dash import html
 from dash import dcc
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 import business_logic as bl
 import layout_configs as lc
@@ -24,98 +24,154 @@ DROPDOWN_STYLE = {"textAlign": "left"}
 #############################################################################
 # Reference cards for bottom disclosures
 # References relating to DEACOT report
+
 deacot_reference_card = (
     dbc.Card(
         [
             dbc.CardBody(
                 [
-                    html.H5("DEACOT Report References", className="card-title"),
-                    html.P(
-                        "Speculators are traders with a commercial interest in the underlying commodity"
-                    ),
-                    html.P(
-                        "Funds are traders with no commercial interest in the underlying commodity"
-                    ),
-                    html.P(
-                        "Others / Non-Reporting are aggregated traders not required to individually register positions"
-                    ),
-                    html.P("Dashed lines signify short position levels."),
-                    html.P("Data retrieved from CFTC.gov:"),
-                    dbc.CardLink(
-                        "DEACOT Report",
-                        href="https://www.cftc.gov/files/dea/history/deacot2021.zip",
+                    dbc.Button("?", id="deacot_card_open", color="dark"),
+                    dbc.Modal(
+                        [
+                            dbc.ModalHeader("DEACOT Report References"),
+                            dbc.ModalBody(
+                                [
+                                    html.P(
+                                        "Speculators are traders with a commercial interest in the underlying commodity"
+                                    ),
+                                    html.P(
+                                        "Funds are traders with no commercial interest in the underlying commodity"
+                                    ),
+                                    html.P(
+                                        "Others / Non-Reporting are aggregated traders not required to individually register positions"
+                                    ),
+                                    html.P(
+                                        "Dashed lines signify short position levels."
+                                    ),
+                                    html.P("Data retrieved from CFTC.gov:"),
+                                    dbc.CardLink(
+                                        "DEACOT Report",
+                                        href="https://www.cftc.gov/files/dea/history/deacot2021.zip",
+                                    ),
+                                ]
+                            ),
+                            dbc.ModalFooter(
+                                dbc.Button(
+                                    "Close",
+                                    id="deacot_card_close",
+                                    className="ml-auto",
+                                )
+                            ),
+                        ],
+                        id="deacot_card_modal",
                     ),
                 ]
-            )
-        ]
+            ),
+        ],
+        style={"width": "5rem"},
     ),
 )
+
+
 # References relating to Disaggregation report
 da_reference_card = (
     dbc.Card(
         [
             dbc.CardBody(
                 [
-                    html.H5("Disaggregation Report References", className="card-title"),
-                    html.P(
-                        "A “producer / merchant / processor / user” is an entity that predominantly engages in the production, processing, packing or handling of a physical commodity."
-                    ),
-                    html.P(
-                        "A “swap dealer” is an entity that deals primarily in swaps for a commodity. The swap dealer counterparties may be speculative traders, like hedge funds, or traditional commercial clients."
-                    ),
-                    html.P(
-                        "A “money manager” is a registered commodity trading advisor (CTA); a registered commodity pool operator (CPO); or an unregistered fund identified by CFTC."
-                    ),
-                    html.P(
-                        "Every other reportable trader that is not placed into one of the other three categories is placed into the “other reportables” category."
-                    ),
-                    html.P("Data retrieved from CFTC.gov:"),
-                    dbc.CardLink(
-                        "Disaggregation Report",
-                        href="https://www.cftc.gov/files/dea/history/fut_disagg_txt_2021.zip",
+                    dbc.Button("?", id="da_reference_card_open", color="dark"),
+                    dbc.Modal(
+                        [
+                            dbc.ModalHeader("Disaggregation Report References"),
+                            dbc.ModalBody(
+                                [
+                                    html.P(
+                                        "A “producer / merchant / processor / user” is an entity that predominantly engages in the production, processing, packing or handling of a physical commodity."
+                                    ),
+                                    html.P(
+                                        "A “swap dealer” is an entity that deals primarily in swaps for a commodity. The swap dealer counterparties may be speculative traders, like hedge funds, or traditional commercial clients."
+                                    ),
+                                    html.P(
+                                        "A “money manager” is a registered commodity trading advisor (CTA); a registered commodity pool operator (CPO); or an unregistered fund identified by CFTC."
+                                    ),
+                                    html.P(
+                                        "Every other reportable trader that is not placed into one of the other three categories is placed into the “other reportables” category."
+                                    ),
+                                    html.P("Data retrieved from CFTC.gov:"),
+                                    dbc.CardLink(
+                                        "Disaggregation Report",
+                                        href="https://www.cftc.gov/files/dea/history/fut_disagg_txt_2021.zip",
+                                    ),
+                                ]
+                            ),
+                            dbc.ModalFooter(
+                                dbc.Button(
+                                    "Close",
+                                    id="da_reference_card_close",
+                                    className="ml-auto",
+                                )
+                            ),
+                        ],
+                        id="da_reference_card_modal",
                     ),
                 ]
             )
-        ]
+        ],
+        style={"width": "5rem"},
     ),
 )
 
 # References relating to 3D surface for all
+# Populates da_3d_legend_row - unused for now
 da_reference_card_3d = (
     dbc.Card(
         [
             dbc.CardBody(
                 [
-                    html.H5(
-                        "DA 3D Report Reference",
-                        className="card-title",
-                    ),
-                    html.P("For visual consistency, the labels have been abbreviated"),
-                    html.P(
+                    dbc.Button("?", id="surface_card_open", color="dark"),
+                    dbc.Modal(
                         [
-                            "Pr is Producer",
-                            html.Br(),
-                            "SD is Swap Dealer",
-                            html.Br(),
-                            "MM is Money Manager",
-                            html.Br(),
-                            "NR is Non-reporting",
-                            html.Br(),
-                            "Ot is Other",
-                        ]
-                    ),
-                    html.P(
-                        [
-                            "L means long positions / Demand",
-                            html.Br(),
-                            "S means short positions / Supply",
-                            html.Br(),
-                            "Net is long positions minus short positions",
-                        ]
+                            dbc.ModalHeader("DA 3D Report Reference"),
+                            dbc.ModalBody(
+                                [
+                                    html.P(
+                                        [
+                                            "Pr: Producer",
+                                            html.Br(),
+                                            "SD: Swap Dealer",
+                                            html.Br(),
+                                            "MM: Money Manager",
+                                            html.Br(),
+                                            "NR: Non-reporting",
+                                            html.Br(),
+                                            "Ot: Other",
+                                        ]
+                                    ),
+                                    html.P(
+                                        [
+                                            "L: long positions / Demand",
+                                            html.Br(),
+                                            "S: short positions / Supply",
+                                            html.Br(),
+                                            "Net: long minus short",
+                                        ]
+                                    ),
+                                ]
+                            ),
+                            dbc.ModalFooter(
+                                dbc.Button(
+                                    "Close",
+                                    id="surface_card_close",
+                                    className="ml-auto",
+                                )
+                            ),
+                        ],
+                        id="surface_card_modal",
                     ),
                 ]
             )
-        ]
+        ],
+        style={"width": "5rem"},
     ),
 )
 
@@ -150,20 +206,16 @@ info_bar = html.Div(
 sentiment_direction = dbc.Row(
     [
         dbc.Col(
-            html.Div(deacot_reference_card),
-            md=2,
-        ),
-        dbc.Col(
             dcc.Graph(
                 id="deacot_sent",
                 style={"height": "70vh"},
                 config=lc.tool_config,
             ),
-            md=8,
+            md=11,
         ),
         dbc.Col(
-            html.Div(da_reference_card),
-            md=2,
+            html.Div(deacot_reference_card),
+            md=1,
         ),
     ]
 )
@@ -177,7 +229,11 @@ DA_direction = dbc.Row(
                 style={"height": "70vh"},
                 config=lc.tool_config,
             ),
-            md=12,
+            md=11,
+        ),
+        dbc.Col(
+            html.Div(da_reference_card),
+            md=1,
         ),
     ]
 )
@@ -226,12 +282,13 @@ da_3d_positions = dbc.Row(
                     allowCross=False,
                 ),
             ],
-            md=5,
+            md=6,
         ),
-        dbc.Col(
-            html.Div(da_reference_card_3d),
-            md=2,
-        ),
+        # dbc.Col(
+        #     html.Div(da_reference_card_3d),
+        #     align="center",
+        #     md=1,
+        # ),
         dbc.Col(
             [
                 dcc.Graph(
@@ -250,6 +307,24 @@ da_3d_positions = dbc.Row(
                     allowCross=False,
                 ),
             ],
+            md=6,
+        ),
+    ]
+)
+
+# Currently unused.  Can't quite get a formatting I like
+# sticking a pin in it for now.
+da_3d_legend_row = dbc.Row(
+    [
+        dbc.Col(
+            md=5,
+        ),
+        dbc.Col(
+            html.Div(da_reference_card_3d),
+            align="center",
+            md=2,
+        ),
+        dbc.Col(
             md=5,
         ),
     ]
@@ -358,6 +433,54 @@ def display_page(pathname):
     #     return volumes
     # else:
     return main_page
+
+
+####################################################
+#  Callbacks - Modals
+####################################################
+# Deacot Reference Card
+@app.callback(
+    Output("deacot_card_modal", "is_open"),
+    [
+        Input("deacot_card_open", "n_clicks"),
+        Input("deacot_card_close", "n_clicks"),
+    ],
+    [State("deacot_card_modal", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+
+# DA Reference card
+@app.callback(
+    Output("da_reference_card_modal", "is_open"),
+    [
+        Input("da_reference_card_open", "n_clicks"),
+        Input("da_reference_card_close", "n_clicks"),
+    ],
+    [State("da_reference_card_modal", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+
+# DA Reference card
+@app.callback(
+    Output("surface_card_modal", "is_open"),
+    [
+        Input("surface_card_open", "n_clicks"),
+        Input("surface_card_close", "n_clicks"),
+    ],
+    [State("surface_card_modal", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
 
 
 ####################################################
