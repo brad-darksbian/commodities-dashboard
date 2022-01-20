@@ -27,6 +27,7 @@ base_path = "/tmp/"
 # Data is available from 2006 until current
 # *Note* Adding more years will considerably slow down the dashboard
 analysis_years = [
+    "2022",
     "2021",
     "2020",
 ]
