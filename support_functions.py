@@ -41,8 +41,15 @@ base_url = "https://www.cftc.gov/files/dea/history/"
 #############################################################################
 # Function to retrieve reports
 def get_COT(url, file_name):
+    req = urllib.request.Request(
+        url, 
+        data=None, 
+        headers={
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
+        }
+    )
 
-    with urllib.request.urlopen(url) as response, open(file_name, "wb") as out_file:
+    with urllib.request.urlopen(req) as response, open(file_name, "wb") as out_file:
         shutil.copyfileobj(response, out_file)
 
     with zipfile.ZipFile(file_name) as zf:
